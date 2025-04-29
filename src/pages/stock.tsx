@@ -1,12 +1,24 @@
+import { getStockItens } from "@/api/stockService";
 import { AddProductModal } from "@/components/modals/AddProductModal";
 import StockTable from "@/components/tables/StockTable";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { products } from "@/utils/fakerjs/products";
 import { Plus, Search } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 
 export function Stock() {
+  const [items, setItems] = useState();
+
+  useEffect(() => {
+    async function fetchData() {
+      const response = await getStockItens();
+      console.log("aquiiiiis", response);
+      setItems(response);
+    }
+    fetchData();
+  }, []);
+
   return (
     <main className="flex flex-col gap-5 px-16">
       <Helmet title="Estoque" />
@@ -29,7 +41,7 @@ export function Stock() {
         </div>
       </section>
       <section>
-        <StockTable products={products} />
+        <StockTable products={items || []} />
       </section>
     </main>
   );
